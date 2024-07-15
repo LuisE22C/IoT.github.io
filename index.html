@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control de LED</title>
+    <script>
+        function sendRequest(action) {
+            const xhr = new XMLHttpRequest();
+            const url = `http://192.168.0.204/led/${action}`;
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("response").innerText = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <h1>Control de LED</h1>
+    <button onclick="sendRequest('on')">Encender LED</button>
+    <button onclick="sendRequest('off')">Apagar LED</button>
+    <p id="response"></p>
+</body>
+</html>
