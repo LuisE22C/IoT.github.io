@@ -1,25 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Control de LED</title>
-    <script>
-        function sendRequest(action) {
-            const xhr = new XMLHttpRequest();
-            const url = `http://192.168.0.204/led/${action}`;
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById("response").innerText = xhr.responseText;
-                }
-            };
-            xhr.send();
+  <title>Control de LEDs</title>
+  <link rel="stylesheet" type="text/css" href="/Style.css">
+  <script>
+    function controlLED(led, state) {
+      var xhttp = new XMLHttpRequest();
+      if (led === "all") {
+        // Apagar todos los LEDs
+        for (var i = 0; i < 4; i++) { // Suponiendo que tienes 4 LEDs
+          var url = "http://192.168.1.65/led?led=" + i + "&state=" + state;
+          xhttp.open("GET", url, false); // Sincronizar la solicitud
+          xhttp.send();
         }
-    </script>
+      } else {
+        var url = "http://192.168.1.65/led?led=" + led + "&state=" + state;
+        xhttp.open("GET", url, true);
+        xhttp.send();
+      }
+    }
+  </script>
 </head>
 <body>
-    <h1>Control de LED</h1>
-    <button onclick="sendRequest('on')">Encender LED</button>
-    <button onclick="sendRequest('off')">Apagar LED</button>
-    <p id="response"></p>
+  <h1>Control de LEDs</h1>
+  <div class="container">
+    <div>
+      <h2>TOMACORRIENTE</h2>
+      <button onclick="controlLED(0, 1)">ON</button>
+      <button onclick="controlLED(0, 0)">OFF</button>
+    </div>
+    <div>
+      <h2>FOCO 1</h2>
+      <button onclick="controlLED(1, 1)">ON</button>
+      <button onclick="controlLED(1, 0)">OFF</button>
+    </div>
+    <div>
+      <h2>FOCO 2</h2>
+      <button onclick="controlLED(2, 1)">ON</button>
+      <button onclick="controlLED(2, 0)">OFF</button>
+    </div>
+    <div>
+      <h2>VENTILADOR</h2>
+      <button onclick="controlLED(3, 1)">ON</button>
+      <button onclick="controlLED(3, 0)">OFF</button>
+    </div>
+    <div>
+      <h2>APAGADO DE EMERGENCIA </h2>
+      <button onclick="controlLED((0,1,2,3), 0)">Apagar todos</button>
+    </div>
+  </div>
 </body>
 </html>
